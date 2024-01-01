@@ -1,0 +1,155 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="btn-group" role="group" aria-label="Basic outlined example">
+    <button
+      type="button"
+      class="btn btn-outline-success mb-4 me-5 mt-4"
+      data-bs-toggle="modal"
+      data-bs-target="#addModal"
+    >
+      Add Menu
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-danger mb-4 mt-4"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+    >
+      Delete Menu
+    </button>
+  </div>
+</div>
+<h1 class="display-3" style="font-family: 'Arial', sans-serif">MENU</h1>
+
+{% for row in items %}
+<div class="row">
+  {% for item in row %}
+  <div class="col-md-4">
+    <div class="card">
+      <h5 class="card-header">{{item['name']}}</h5>
+      <div class="card-body">
+        <div class="card-img text-center" style="height: 150px">
+          <img src="{{item['img']}}" height="100%" width="auto" />
+        </div>
+        <div>
+          <h4>Ingredients</h4>
+          <p class="card-text">{{item['ingre']}}</p>
+        </div>
+        <div>
+          <h4>How To</h4>
+          <p class="card-text">{{item['howto']}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div
+  class="modal fade"
+  id="addModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Menu</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{{url_for('index')}}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="mb-3">
+            <input class="form-control" type="file" name="file" id="formFile" />
+          </div>
+          <div class="mb-3">
+            <label for="name" class="col-form-label">Menu:</label>
+            <input type="text" class="form-control" name="name" />
+          </div>
+          <div class="mb-3">
+            <label for="ingre" class="col-form-label">Ingredients:</label>
+            <textarea class="form-control" name="ingre"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="howto" class="col-form-label">How to:</label>
+            <textarea class="form-control" name="howto"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Menu</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{{url_for('delete')}}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <select
+            class="form-select"
+            multiple
+            name="multiitems"
+            aria-label="multiple select example"
+          >
+            <option selected>Select Menu:</option>
+            {% for row in items %} {% for item in row %}
+            <option value="{{item}}">{{item['name']}}</option>
+            {% endfor %} {% endfor %}
+          </select>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
